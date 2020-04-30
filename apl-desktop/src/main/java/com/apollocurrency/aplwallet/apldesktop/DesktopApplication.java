@@ -20,8 +20,8 @@
 
 package com.apollocurrency.aplwallet.apldesktop;
 
-import com.apollocurrency.aplwallet.apl.util.Constants;
-import com.apollocurrency.aplwallet.apl.util.Version;
+//import com.apollocurrency.aplwallet.apl.util.Constants;
+//import com.apollocurrency.aplwallet.apl.util.Version;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
@@ -81,6 +81,8 @@ public class DesktopApplication extends Application {
     private static volatile Stage screenStage;
     private static volatile Stage changelogStage;
     private static String APIUrl;
+
+     
     //private static PropertiesHolder propertiesHolder = CDI.current().select(PropertiesHolder.class).get();
 
 //    private static final BlockchainConfig blockchainConfig = CDI.current().select(BlockchainConfig.class).get();
@@ -270,9 +272,9 @@ public class DesktopApplication extends Application {
             pane.getChildren().add(indicator);
             Text statusText = new Text();
             Text versionText = new Text();
-            Version ver = Constants.VERSION;
             versionText.setId("version-text");
-            versionText.setText("Wallet version " + ver);
+            //TODO: read from backend
+            versionText.setText("Wallet version " +"0.0.0.0");
             statusText.setId("status-text");
             statusText.setText("Apollo wallet is loading. Please, wait");
             AnchorPane.setTopAnchor(versionText, 130.0);

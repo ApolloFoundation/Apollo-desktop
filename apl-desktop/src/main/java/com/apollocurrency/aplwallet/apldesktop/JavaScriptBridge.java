@@ -22,7 +22,7 @@ package com.apollocurrency.aplwallet.apldesktop;
 
 //import com.apollocurrency.aplwallet.apl.core.app.AplCoreRuntime;
 
-import com.apollocurrency.aplwallet.apl.core.http.API;
+//import com.apollocurrency.aplwallet.apl.core.http.API;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -65,12 +65,12 @@ public class JavaScriptBridge {
 
     @SuppressWarnings("unused")
     public void openBrowser(String account) {
-        final String url = API.getWelcomePageUri().toString() + "?account=" + account;
+        final String url = DesktopConfig.getInstance().getWelocmePageURI()+ "?account=" + account;
         Platform.runLater(() -> {
             try {
                 Desktop.getDesktop().browse(new URI(url));
             } catch (Exception e) {
-                LOG.info("Cannot open " + API.getWelcomePageUri().toString() + " error " + e.getMessage());
+                LOG.info("Cannot open " + DesktopConfig.getInstance().getWelocmePageURI() + " error " + e.getMessage());
             }
         });
     }

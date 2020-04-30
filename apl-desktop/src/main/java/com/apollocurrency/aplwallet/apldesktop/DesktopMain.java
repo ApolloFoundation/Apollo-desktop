@@ -34,53 +34,18 @@ import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class DesktopMode {
+public class DesktopMain {
     public static String logDir = System.getProperty("user.home" + "/.apl-blockchain/apl-desktop");
     private static Logger LOG;
 
     private static DesktopSystemTray desktopSystemTray;
     private static DesktopApplication desktopApp;
     private static String OS = System.getProperty("os.name").toLowerCase();
-    private static String APIUrl;
+
 
     public static void main(String[] args) {
-
-        //TODO: Adopt to config files
-        /*/load configuration files
-        EnvironmentVariables envVars = new EnvironmentVariables(Constants.APPLICATION_DIR_NAME);
-        ConfigDirProvider configDirProvider = new ConfigDirProviderFactory().getInstance(false, Constants.APPLICATION_DIR_NAME);
-
-        PropertiesConfigLoader propertiesLoader = new PropertiesConfigLoader(
-                configDirProvider,
-                false,
-                envVars.configDir,
-                Constants.DESKTOP_APPLICATION_NAME + ".properties",
-                null
-        );
-
-        // init config holders
-        container.builder().containerId("APL-DESKTOP-CDI")
-                .recursiveScanPackages(PropertiesHolder.class)
-                .annotatedDiscoveryMode().build();
-
-        properties = CDI.current().select(PropertiesHolder.class).get();
-        LOG.debug("PROPERTIES2:" + properties.getClass().getName());
-        Properties props = propertiesLoader.load();
-        properties.init(props);
-
-        // init application data dir provider
-        LOG.debug("PROPERTIES:" + props.toString());
-
-        dirProvider = DirProviderFactory.getProvider(
-                false,
-                UUID.fromString("d5c22b16-935e-495d-aa3f-bb26ef2115d3"), // stub for compatibility
-                Constants.APPLICATION_DIR_NAME,
-                new PredefinedDirLocations(null, logDir, null, null, null));
-        RuntimeEnvironment.getInstance().setDirProvider(dirProvider);
-        //init logging
-        logDir = dirProvider.getLogsDir().toAbsolutePath().toString();
-        */
-        LOG = getLogger(DesktopMode.class);
+        
+        LOG = getLogger(DesktopMain.class);
 
         desktopApp = new DesktopApplication();
         Thread desktopAppThread = new Thread(() -> {
@@ -96,7 +61,7 @@ public class DesktopMode {
                     LOG.info("GUI thread was interrupted", e);
                 }
             }
-            desktopApp.startDesktopApplication(APIUrl);
+            desktopApp.startDesktopApplication(DesktopConfig.getInstance().getWelocmePageURI());
 
         };
 
@@ -112,23 +77,16 @@ public class DesktopMode {
     private static boolean checkAPI() {
         OkHttpClient client = new OkHttpClient();
         try {
-            //String url = properties.getStringProperty("apl.APIURL");
-            //TODO: This code was written when I was very tired, resolvin CDI NPE...
-
-            //String url = properties.getStringProperty("apl.APIURL");
-            String url = "http://localhost:7876/";
-            Request request = new Request.Builder().url(url).build();
+            Request request = new Request.Builder().url(DesktopConfig.getInstance().getWelocmePageURI()).build();
 
             Response response;
             try {
                 response = client.newCall(request).execute();
             } catch (IOException ex) {
-                //java.util.logging.Logger.getLogger(DesktopMode.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
 
             if (response.code() == 200) {
-                APIUrl = url;
                 return true;
             } else if (response.code() == 200) {
                 DesktopApplication.updateSplashScreenStatus(response.body().toString());
@@ -176,9 +134,7 @@ public class DesktopMode {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        /* catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(DesktopMode.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+
     }
 
     public void setServerStatus(String message, URI wallet, File logFileDir) {
@@ -187,7 +143,7 @@ public class DesktopMode {
 
     public void launchDesktopApplication() {
         LOG.info("Launching desktop wallet");
-        desktopApp.startDesktopApplication(APIUrl);
+        desktopApp.startDesktopApplication(DesktopConfig.getInstance().getWelocmePageURI());
     }
 
     public void shutdown() {
@@ -195,16 +151,7 @@ public class DesktopMode {
         desktopApp.shutdown();
     }
 
-//    @Override
-//    public void recoverDb() {
-//        try {
-//            desktopAppClass.getMethod("recoverDbUI").invoke(null);
-//        }
-//        catch (Exception e) {
-//            //rethrow
-//            throw new RuntimeException("Unable to show recover db dialog!", e);
-//        }
-//    }
+
 
     public void alert(String message) {
         desktopSystemTray.alert(message);
