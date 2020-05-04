@@ -22,8 +22,6 @@ package com.apollocurrency.aplwallet.apldesktop;
 
 //import com.apollocurrency.aplwallet.apl.util.Constants;
 //import com.apollocurrency.aplwallet.apl.util.Version;
-import com.apollocurrency.aplwallet.apl.util.Constants;
-import com.apollocurrency.aplwallet.apl.util.TrustAllSSLProvider;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;

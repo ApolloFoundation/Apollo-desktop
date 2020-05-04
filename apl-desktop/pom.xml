@@ -22,9 +22,40 @@
     <javafx.version>14.0.1</javafx.version>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>      
-    <compile-plugin.version>3.8.2</compile-plugin.version>    
+    <compile-plugin.version>3.8.2</compile-plugin.version>
+    <zip-file-name>apollo-desktop</zip-file-name>    
   </properties>
   
+  <profiles>
+    <!-- The Configuration of the development profile -->
+    <profile>
+      <id>dev</id>
+      <activation>
+        <property>
+          <name>develop</name>
+        </property>
+      </activation>
+      <properties>
+        <zipExecutionPhase>none</zipExecutionPhase>
+        <skipIntergationTests>true</skipIntergationTests>
+      </properties>
+    </profile>
+    <!-- The Configuration of the production profile -->
+    <profile>
+      <id>prod</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>production</name>
+        </property>
+      </activation>
+      <properties>
+        <zipExecutionPhase>package</zipExecutionPhase>
+        <skipIntergationTests>true</skipIntergationTests>
+      </properties>
+    </profile>
+  </profiles>
+    
   <repositories>
     <!-- arti.firstbridge.work does not chache in apl repo so we have to add Maven Central here -->
     <repository>
@@ -75,12 +106,15 @@
           <artifactId>apl-crypto</artifactId>
         </dependency>
     -->    
-    <!-- this is one thing allowed to import from apollo core -->  
+    <!-- this is one thing allowed to import from apollo core 
+         but after some cleanup, not today
+    -->  
+<!--    
     <dependency>
       <groupId>com.apollocurrency</groupId>
       <artifactId>apl-utils</artifactId>
     </dependency>
-    
+-->    
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
@@ -234,11 +268,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss.weld</groupId>
-      <artifactId>weld-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
@@ -290,6 +319,14 @@
         </executions>
 
       </plugin>
+       <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.4</version>
+        <configuration>
+          <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
+        </configuration>
+      </plugin>     
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -298,40 +335,55 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <classpathPrefix>./</classpathPrefix>
+              <classpathPrefix>guilib</classpathPrefix>
               <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
             </manifest>
           </archive>
         </configuration>
       </plugin>
-      
-      <!-- Build an executable fat JAR -->        
-      
-<!--      <plugin>
+       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.2.0</version>
-
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-        <archive>
-          <manifest>
-           <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
-          </manifest>
-        </archive>                
-        </configuration>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
         <executions>
           <execution>
-            <id>make-assembly</id>
+            <id>copy-dependencies</id>
             <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <excludeTypes>zip</excludeTypes>
+              <excludeArtifactIds>jsonassert</excludeArtifactIds>
+              <excludeGroupIds>org.junit,org.mockito,org.opentest4j,org.hibernate.javax.persistence</excludeGroupIds>
+              <outputDirectory>${project.build.directory}/guilib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>     
+      <!-- Build an zip distribution -->        
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.2.0</version> 
+        <executions>
+          <execution>
+            <id>distro-assembly</id>
+            <phase>${zipExecutionPhase}</phase>
             <goals>
               <goal>single</goal>
             </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/assembly/zipdist.xml</descriptor>
+              </descriptors>
+              <appendAssemblyId>false</appendAssemblyId>
+              <finalName>${zip-file-name}</finalName>
+            </configuration>
           </execution>
-        </executions>    
-      </plugin>      -->
+        </executions>          
+      </plugin>      
     </plugins>
   </build>
 </project>
