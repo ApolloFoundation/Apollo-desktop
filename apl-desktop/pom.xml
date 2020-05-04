@@ -19,10 +19,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <java.version>11</java.version>
-    <javafx.version>13.0.2</javafx.version>
+    <javafx.version>14.0.1</javafx.version>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>      
-    <compile-plugin.version>3.8.1</compile-plugin.version>    
+    <compile-plugin.version>3.8.2</compile-plugin.version>    
   </properties>
   
   <repositories>
@@ -67,15 +67,15 @@
      
   <dependencies>
     
-<!-- It is not used at the moment. You'll realy need it when
-    implementation of offline transaction siginin will begin
-        
-    <dependency>
-      <groupId>com.apollocurrency</groupId>
-      <artifactId>apl-crypto</artifactId>
-    </dependency>
--->    
-<!-- this is one thing allowed to import from apollo core -->  
+    <!-- It is not used at the moment. You'll realy need it when
+        implementation of offline transaction siginin will begin
+            
+        <dependency>
+          <groupId>com.apollocurrency</groupId>
+          <artifactId>apl-crypto</artifactId>
+        </dependency>
+    -->    
+    <!-- this is one thing allowed to import from apollo core -->  
     <dependency>
       <groupId>com.apollocurrency</groupId>
       <artifactId>apl-utils</artifactId>
@@ -291,7 +291,6 @@
 
       </plugin>
       <plugin>
-        <!-- Build an executable JAR -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.2.0</version>
@@ -300,11 +299,39 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>./</classpathPrefix>
-              <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMode</mainClass>
+              <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
             </manifest>
           </archive>
         </configuration>
       </plugin>
+      
+      <!-- Build an executable fat JAR -->        
+      
+<!--      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.2.0</version>
+
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        <archive>
+          <manifest>
+           <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
+          </manifest>
+        </archive>                
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>    
+      </plugin>      -->
     </plugins>
   </build>
 </project>

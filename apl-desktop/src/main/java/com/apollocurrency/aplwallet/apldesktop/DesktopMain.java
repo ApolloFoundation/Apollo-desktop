@@ -56,7 +56,7 @@ public class DesktopMain {
         });
         desktopAppThread.start();
 
-        final int nTriesMax = 10;
+        final int nTriesMax = 20;
 
         LookAndFeel.init();
 
@@ -69,7 +69,7 @@ public class DesktopMain {
                 break;
             }
             try {
-                TimeUnit.MILLISECONDS.sleep(200);
+                TimeUnit.MILLISECONDS.sleep(500);
             } catch (InterruptedException e) {
                 LOG.info("GUI thread was interrupted", e);
             }
