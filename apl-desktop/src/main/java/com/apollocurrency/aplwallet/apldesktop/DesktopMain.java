@@ -14,10 +14,9 @@
  *
  */
 
-/*
+ /*
  * Copyright © 2018 Apollo Foundation
  */
-
 package com.apollocurrency.aplwallet.apldesktop;
 
 import okhttp3.OkHttpClient;
@@ -31,20 +30,24 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class DesktopMain {
+
     public static String logDir = System.getProperty("user.home" + "/.apl-blockchain/apl-desktop");
     private static Logger LOG;
 
     private static DesktopSystemTray desktopSystemTray;
     private static DesktopApplication desktopApp;
     private static String OS = System.getProperty("os.name").toLowerCase();
-
+    private static boolean workingAPI = false;
 
     public static void main(String[] args) {
-        
+        String apiUrl = DesktopConfig.getInstance().getWelocmePageURI();
         LOG = getLogger(DesktopMain.class);
 
         desktopApp = new DesktopApplication();
@@ -52,26 +55,41 @@ public class DesktopMain {
             desktopApp.launch();
         });
         desktopAppThread.start();
-        new Thread(() -> runBackend(args)).start();
-        Runnable statusUpdater = () -> {
-            while (!checkAPI()) {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(200);
-                } catch (InterruptedException e) {
-                    LOG.info("GUI thread was interrupted", e);
-                }
-            }
-            desktopApp.startDesktopApplication(DesktopConfig.getInstance().getWelocmePageURI());
 
-        };
+        final int nTriesMax = 10;
 
-        Thread updateSplashScreenThread = new Thread(statusUpdater, "SplashScreenStatusUpdaterThread");
-        updateSplashScreenThread.setDaemon(true);
-        updateSplashScreenThread.start();
         LookAndFeel.init();
 
         desktopSystemTray = new DesktopSystemTray();
         SwingUtilities.invokeLater(desktopSystemTray::createAndShowGUI);
+
+        for (int i = 0; i < nTriesMax; i++) {
+            workingAPI = checkAPI();
+            if (workingAPI) {
+                break;
+            }
+            try {
+                TimeUnit.MILLISECONDS.sleep(200);
+            } catch (InterruptedException e) {
+                LOG.info("GUI thread was interrupted", e);
+            }
+        }
+        if (workingAPI) {
+            DesktopApplication.startDesktopApplication(apiUrl);
+        } else {
+            Platform.runLater(DesktopMain::showAPIError);
+        }
+    }
+
+    private static void showAPIError() {
+        String url = DesktopConfig.getInstance().getWelocmePageURI();
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Apollo API is not available");
+        alert.setContentText("Ooops, Apollo backend is not available at " + url + " Please start it and then start Desktop Wallet again!");
+        alert.showAndWait();
+        System.err.println("Apollo API is not available at " + url + " Exiting GUI");
+        System.exit(2);
     }
 
     private static boolean checkAPI() {
@@ -99,44 +117,6 @@ public class DesktopMain {
         return false;
     }
 
-    private static void runBackend(String[] args) {
-        Process p;
-        try {
-            String cmdArgs = String.join(" ", args);
-            //TODO: Refactor that funny code below
-
-            String command = "apl-run";
-            if (System.getProperty("apl.exec.mode") != null) {
-                if (System.getProperty("apl.exec.mode").equals("tor")) {
-                    command = "apl-run-tor";
-                } else if (System.getProperty("apl.exec.mode").equals("transport")) {
-                    command = "apl-run-secure-transport";
-                }
-            }
-            ProcessBuilder pb;
-            if (System.getProperty("os.name").toLowerCase().contains("win")) {
-                pb = new ProcessBuilder(".\\" + command + ".bat ", cmdArgs);
-            } else {
-                pb = new ProcessBuilder("/bin/bash", "./apl-start.sh", cmdArgs);
-            }
-            LOG.info("Will run command: {}", pb.command());
-
-            String tempDir = System.getProperty("java.io.tmpdir");
-            File outputLogFile = Paths.get(tempDir).resolve("backend-start-output.txt").toFile();
-            File errorLogFile = Paths.get(tempDir).resolve("backend-start-error.txt").toFile();
-            LOG.info("Output log file: {}, Error log file: {}", outputLogFile, errorLogFile);
-            pb.redirectOutput(ProcessBuilder.Redirect.to(outputLogFile))
-                .redirectError(ProcessBuilder.Redirect.to(errorLogFile));
-            int code = pb.start().waitFor();
-            LOG.info("Backend start script returned code {}", code);
-        } catch (IOException e) {
-            LOG.debug(e.getMessage());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void setServerStatus(String message, URI wallet, File logFileDir) {
         desktopSystemTray.setToolTip(new SystemTrayDataProvider(message, wallet, logFileDir));
     }
@@ -150,8 +130,6 @@ public class DesktopMain {
         desktopSystemTray.shutdown();
         desktopApp.shutdown();
     }
-
-
 
     public void alert(String message) {
         desktopSystemTray.alert(message);

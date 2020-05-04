@@ -22,6 +22,8 @@ package com.apollocurrency.aplwallet.apldesktop;
 
 //import com.apollocurrency.aplwallet.apl.util.Constants;
 //import com.apollocurrency.aplwallet.apl.util.Version;
+import com.apollocurrency.aplwallet.apl.util.Constants;
+import com.apollocurrency.aplwallet.apl.util.TrustAllSSLProvider;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
@@ -66,6 +68,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.apollocurrency.aplwallet.apldesktop.DesktopApplication.MainApplication.showStage;
+import javax.net.ssl.HttpsURLConnection;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class DesktopApplication extends Application {
@@ -77,16 +80,9 @@ public class DesktopApplication extends Application {
     private static final boolean ENABLE_JAVASCRIPT_DEBUGGER = false;
     static volatile Stage mainStage;
     private static volatile boolean isSplashScreenLaunched = false;
-    //private static OptionDAO optionDAO = new OptionDAO();
     private static volatile Stage screenStage;
     private static volatile Stage changelogStage;
-    private static String APIUrl;
-
-     
-    //private static PropertiesHolder propertiesHolder = CDI.current().select(PropertiesHolder.class).get();
-
-//    private static final BlockchainConfig blockchainConfig = CDI.current().select(BlockchainConfig.class).get();
-//    private static final BlockchainProcessor blockchainProcessor = CDI.current().select(BlockchainProcessorImpl.class).get();
+    private static String apiUrl;
 
 
     public static void refreshMainApplication() {
@@ -94,20 +90,17 @@ public class DesktopApplication extends Application {
     }
 
     private static String getUrl() {
-        /*/TODO: use default URL from config
-        String url = "http://localhost:7876/";//API.getWelcomePageUri().toString();
 
-        if (url.startsWith("https")) {
-            HttpsURLConnection.setDefaultSSLSocketFactory(TrustAllSSLProvider.getSslSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier(TrustAllSSLProvider.getHostNameVerifier());
-        }
-//TODO:  WTF?
+        String url = apiUrl;
+
+
+//TODO:  Do we need that?
         //String defaultAccount = aplGlobalObjects.getStringProperty("apl.defaultDesktopAccount");
-         String defaultAccount = "";
+        String defaultAccount = "";
         if (defaultAccount != null && !defaultAccount.isEmpty() && !defaultAccount.equals("")) {
             url += "?account=" + defaultAccount;
-        }*/
-        return APIUrl;
+        }
+        return url;
     }
 
     public static void shutdownSplashScreen() {
@@ -129,14 +122,13 @@ public class DesktopApplication extends Application {
         }
     }
 
-    //TODO: Recover DB in core
-    /*public static void recoverDbUI() {
-        DB_RECOVERING_UI.tryToRecoverDB();
-    }*/
 
     public static void startDesktopApplication(String APIlocation) {
-        APIUrl = APIlocation;
-
+        apiUrl = APIlocation;
+        if (apiUrl.startsWith("https")) {
+            HttpsURLConnection.setDefaultSSLSocketFactory(TrustAllSSLProvider.getSslSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(TrustAllSSLProvider.getHostNameVerifier());
+        }
         if (isSplashScreenLaunched) {
             shutdownSplashScreen();
         }
@@ -145,12 +137,12 @@ public class DesktopApplication extends Application {
         Platform.runLater(MAIN_APPLICATION::startDesktopApplication);
 
 //TODO:: make with changelog
-        /*        if (!Constants.VERSION.toString().equals(optionDAO.get("Previous launch APP Version")))
-        {
-            Platform.runLater(MAIN_APPLICATION::startChangelogWindow);
-            optionDAO.set("Previous launch APP Version", Constants.VERSION.toString());
-
-        }*/
+//        if (!Constants.VERSION.toString().equals(optionDAO.get("Previous launch APP Version")))
+//        {
+//            Platform.runLater(MAIN_APPLICATION::startChangelogWindow);
+//            optionDAO.set("Previous launch APP Version", Constants.VERSION.toString());
+//
+//        }
 
     }
 
@@ -274,7 +266,7 @@ public class DesktopApplication extends Application {
             Text versionText = new Text();
             versionText.setId("version-text");
             //TODO: read from backend
-            versionText.setText("Wallet version " +"0.0.0.0");
+            versionText.setText("Wallet version " +Constants.VERSION);
             statusText.setId("status-text");
             statusText.setText("Apollo wallet is loading. Please, wait");
             AnchorPane.setTopAnchor(versionText, 130.0);

@@ -75,14 +75,12 @@
       <artifactId>apl-crypto</artifactId>
     </dependency>
 -->    
-<!-- Do not enable it for stupid small things.
-    You'll really need apl-utils if you want to communicate with supervisor or
-    transport or other components    
+<!-- this is one thing allowed to import from apollo core -->  
     <dependency>
       <groupId>com.apollocurrency</groupId>
       <artifactId>apl-utils</artifactId>
     </dependency>
--->    
+    
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
