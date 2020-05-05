@@ -20,12 +20,12 @@
 
 package com.apollocurrency.aplwallet.apldesktop;
 
-import com.apollocurrency.aplwallet.apl.core.app.Convert2;
-import com.apollocurrency.aplwallet.apl.core.app.Generator;
-import com.apollocurrency.aplwallet.apl.core.http.API;
-import com.apollocurrency.aplwallet.apl.util.Constants;
-import com.apollocurrency.aplwallet.apl.util.env.RuntimeEnvironment;
-import com.apollocurrency.aplwallet.apl.util.env.RuntimeParams;
+//import com.apollocurrency.aplwallet.apl.core.app.Convert2;
+//import com.apollocurrency.aplwallet.apl.core.app.Generator;
+//import com.apollocurrency.aplwallet.apl.core.http.API;
+//import com.apollocurrency.aplwallet.apl.util.Constants;
+//import com.apollocurrency.aplwallet.apl.util.env.RuntimeEnvironment;
+//import com.apollocurrency.aplwallet.apl.util.env.RuntimeParams;
 import org.slf4j.Logger;
 
 import javax.swing.*;
@@ -58,7 +58,8 @@ public class DesktopSystemTray {
     private MenuItem openWalletInBrowser;
     private MenuItem viewLog;
     private SystemTrayDataProvider dataProvider;
-
+   
+        
     public static String humanReadableByteCount(long bytes) {
         int unit = 1000;
         if (bytes < unit) {
@@ -88,10 +89,10 @@ public class DesktopSystemTray {
         }
         MenuItem showDesktopApplication = new MenuItem("Show Desktop Application");
         MenuItem refreshDesktopApplication = new MenuItem("Refresh Wallet");
-        if (!RuntimeEnvironment.getInstance().isDesktopApplicationEnabled()) {
+//        if (!RuntimeEnvironment.getInstance().isDesktopApplicationEnabled()) {
             showDesktopApplication.setEnabled(false);
             refreshDesktopApplication.setEnabled(false);
-        }
+//        }
         viewLog = new MenuItem("View Log File");
         if (!Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
             viewLog.setEnabled(false);
@@ -153,7 +154,7 @@ public class DesktopSystemTray {
 
         shutdown.addActionListener(e -> {
             if (JOptionPane.showConfirmDialog(null,
-                "Sure you want to shutdown " + Constants.APPLICATION + "?\n\nIf you do, this will stop forging, shufflers and account monitors.\n\n",
+                "Sure you want to shutdown Apollo UI" + "?\n\nIf you do, this will stop forging, shufflers and account monitors.\n\n",
                 "Shutdown",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 LOG.info("Shutdown requested by System Tray");
@@ -173,12 +174,12 @@ public class DesktopSystemTray {
     private void displayStatus() {
         //TODO: getLastBlock using API
         //Block lastBlock = blockchain.getLastBlock();
-        Collection<Generator> allGenerators = Generator.getAllGenerators();
-
-        StringBuilder generators = new StringBuilder();
-        for (Generator generator : allGenerators) {
-            generators.append(Convert2.rsAccount(generator.getAccountId())).append(' ');
-        }
+//        Collection<Generator> allGenerators = Generator.getAllGenerators();
+//
+//        StringBuilder generators = new StringBuilder();
+//        for (Generator generator : allGenerators) {
+//            generators.append(Convert2.rsAccount(generator.getAccountId())).append(' ');
+//        }
         Object optionPaneBackground = UIManager.get("OptionPane.background");
         UIManager.put("OptionPane.background", Color.WHITE);
         Object panelBackground = UIManager.get("Panel.background");
@@ -194,14 +195,17 @@ public class DesktopSystemTray {
         statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.Y_AXIS));
 
         addLabelRow(statusPanel, "Installation");
-        addDataRow(statusPanel, "Application", Constants.APPLICATION);
-        addDataRow(statusPanel, "Version", Constants.VERSION.toString());
+//TODO: read from backend        
+        addDataRow(statusPanel, "Application", "Apollo Wallet");
+        addDataRow(statusPanel, "Version", "0.0.0");
         //addDataRow(statusPanel, "Network", blockchainConfig.getChain().getName());
         addDataRow(statusPanel, "Network", "Apollo default");
 
         //addDataRow(statusPanel, "Working offline", "" + propertiesHolder.isOffline());
         addDataRow(statusPanel, "Working offline", "" + "false");
-        addDataRow(statusPanel, "Wallet", String.valueOf(API.getWelcomePageUri()));
+        //TODO: get URL from config
+
+        addDataRow(statusPanel, "Wallet", DesktopConfig.getInstance().getWelocmePageURI());
 //        addDataRow(statusPanel, "Peer port", String.valueOf(Peers.getDefaultPeerPort()));
         addDataRow(statusPanel, "Program folder", String.valueOf(Paths.get(".").toAbsolutePath().getParent()));
 //        addDataRow(statusPanel, "User folder", String.valueOf(Paths.get(AplCoreRuntime.getInstance().getUserHomeDir()).toAbsolutePath()));
@@ -230,12 +234,12 @@ public class DesktopSystemTray {
         addDataRow(statusPanel, "Max memory", humanReadableByteCount(Runtime.getRuntime().maxMemory()));
         addDataRow(statusPanel, "Total memory", humanReadableByteCount(Runtime.getRuntime().totalMemory()));
         addDataRow(statusPanel, "Free memory", humanReadableByteCount(Runtime.getRuntime().freeMemory()));
-        addDataRow(statusPanel, "Process id", RuntimeParams.getProcessId());
+        addDataRow(statusPanel, "Process id", "0");
         addEmptyRow(statusPanel);
         addDataRow(statusPanel, "Updated", dateFormat.format(new Date()));
         if (statusDialog == null || !statusDialog.isVisible()) {
             JOptionPane pane = new JOptionPane(statusPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, imageIcon);
-            statusDialog = pane.createDialog(wrapper, Constants.APPLICATION + " Server Status");
+            statusDialog = pane.createDialog(wrapper, "Apollo Blockchain" + " Server Status");
             statusDialog.setVisible(true);
             statusDialog.dispose();
         } else {
