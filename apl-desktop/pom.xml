@@ -116,12 +116,7 @@
       <artifactId>apl-utils</artifactId>
     </dependency>
 -->    
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>3.11.0</version>
-    </dependency>
-    
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

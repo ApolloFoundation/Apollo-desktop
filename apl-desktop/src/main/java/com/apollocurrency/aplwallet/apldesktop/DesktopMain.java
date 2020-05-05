@@ -19,17 +19,19 @@
  */
 package com.apollocurrency.aplwallet.apldesktop;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Paths;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Redirect;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -93,28 +95,29 @@ public class DesktopMain {
     }
 
     private static boolean checkAPI() {
-        OkHttpClient client = new OkHttpClient();
+        String url = DesktopConfig.getInstance().getWelocmePageURI();
+        HttpClient client = HttpClient.newBuilder()
+                .followRedirects(Redirect.NORMAL)
+                .connectTimeout(Duration.ofSeconds(3))
+                .build();
+        boolean res = false;
+        var request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
+        HttpResponse<String> response;
+
         try {
-            Request request = new Request.Builder().url(DesktopConfig.getInstance().getWelocmePageURI()).build();
-
-            Response response;
-            try {
-                response = client.newCall(request).execute();
-            } catch (IOException ex) {
-                return false;
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            res = response.statusCode() == 200;
+            if (res) {
+                DesktopApplication.updateSplashScreenStatus(response.body());
             }
-
-            if (response.code() == 200) {
-                return true;
-            } else if (response.code() == 200) {
-                DesktopApplication.updateSplashScreenStatus(response.body().toString());
-            }
-        } finally {
-            client.dispatcher().executorService().shutdown();
-            client.connectionPool().evictAll();
+        } catch (IOException ex) {
+            LOG.debug("WebUI is not available at {}", url);
+        } catch (InterruptedException ex) {
+            LOG.debug("Http client Interrupted",ex);
+            Thread.currentThread().interrupt();
         }
 
-        return false;
+        return res;
     }
 
     public void setServerStatus(String message, URI wallet, File logFileDir) {
