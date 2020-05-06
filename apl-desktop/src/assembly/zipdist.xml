@@ -19,8 +19,6 @@
         <include>README*</include>
         <include>LICENSE*</include>
         <include>CHANGELOG*</include>
-        <include>favicon.ico</include>
-        <include>3RD-PARTY-LICENSES.txt</include>
       </includes>
     </fileSet>
     <fileSet>
@@ -35,7 +33,14 @@
       <directory>${project.build.directory}/classes/conf/</directory>
       <outputDirectory>${base-dist-dir}/conf</outputDirectory>
     </fileSet>
-
+    <fileSet>
+      <directory>${project.build.directory}/guilib</directory>
+      <outputDirectory>${base-dist-dir}/guilib</outputDirectory>
+      <excludes>
+        <exclude>apl-desktop*</exclude>
+      </excludes>
+      <fileMode>0644</fileMode>
+    </fileSet>
   </fileSets>
   <files> <!-- we need main jar to stay in top dir because we have classpath in it pointing to lib dir -->
     <file>
@@ -43,9 +48,4 @@
       <outputDirectory>${base-dist-dir}/</outputDirectory>
     </file>
   </files>
-  <dependencySets>
-    <dependencySet>
-      <outputDirectory>${base-dist-dir}/guilib</outputDirectory>
-    </dependencySet>
-  </dependencySets>
 </assembly>
