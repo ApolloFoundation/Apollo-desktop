@@ -358,6 +358,30 @@
         </executions>
       </plugin>     
       <!-- Build an zip distribution -->        
+      <plugin>
+        <groupId>ca.szc.maven</groupId>
+        <artifactId>jsonpath-maven-plugin</artifactId>
+        <version>1.2.0</version>
+        <executions>
+          <execution>
+            <id>update-version</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>modify</goal>
+            </goals>
+            <configuration>
+              <file>${basedir}/pkg-apollo-desktop.json</file>
+              <formatter>conventional</formatter>
+              <modifications>
+                <modification>
+                  <expression>$.version</expression>
+                  <value>${project.version}</value>
+                </modification>
+              </modifications>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin> 
       
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
