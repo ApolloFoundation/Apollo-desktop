@@ -10,10 +10,16 @@
       "version_max": "13.0.2"
     },
     {
-      "name": "Apollo-web-ui",
+      "name": "apollo-web-ui",
       "optional": false,
       "version_min": "2.7.5",
       "version_max": "2.7.6"
+    },
+    {
+      "name": "apollo-blockchain",
+      "optional": false,
+      "version_min": "1.43.0",
+      "version_max": "1.44.0"
     }
   ]
 }
