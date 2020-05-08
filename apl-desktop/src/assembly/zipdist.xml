@@ -19,6 +19,8 @@
         <include>README*</include>
         <include>LICENSE*</include>
         <include>CHANGELOG*</include>
+        <include>VERSION*</include>
+        <include>favicon.ico</include>
       </includes>
     </fileSet>
     <fileSet>

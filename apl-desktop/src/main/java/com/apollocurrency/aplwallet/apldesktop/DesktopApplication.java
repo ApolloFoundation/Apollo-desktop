@@ -651,7 +651,7 @@ public class DesktopApplication extends Application {
 
 
     }
-
+//TODO: use supervisor
     private static class DbRecoveringUI {
         private static DbRecoveringUI instance = new DbRecoveringUI();
 
@@ -662,38 +662,6 @@ public class DesktopApplication extends Application {
             return instance;
         }
 
-        //TODO: Reindex in core
-        /*public void tryToRecoverDB() {
-            new JFXPanel(); // prepare JavaFX toolkit and environment
-            Platform.runLater(() -> {
-                Alert alert = prepareAlert(Alert.AlertType.ERROR, "Db initialization failed", "Db was crashed! Do you want to recover db?", 180, new ButtonType("Yes", ButtonBar.ButtonData.YES), new ButtonType("No", ButtonBar.ButtonData.NO));
-                Optional<ButtonType> selectedButtonType = alert.showAndWait();
-                if (selectedButtonType.isPresent()) {
-                    if (selectedButtonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
-                        try {
-                            LOG.info("Trying to reindex db...");
-                            //re-index db and return alert
-                            Optional<ButtonType> clickedButtonType = reindexDbUI().showAndWait();
-                            if (clickedButtonType.isPresent()) {
-                                ButtonType clickedButton = clickedButtonType.get();
-                                if (clickedButton.getText().equalsIgnoreCase("Remove db")) {
-                                    //delete db and show alert
-                                    deleteDbAndHandleException().show();
-                                }
-                            }
-                        }
-                        catch (SQLException sqlEx) {
-                            LOG.error("Cannot reindex database!", sqlEx);
-                            //delete db and show alert
-                            deleteDbAndHandleException().show();
-                        }
-                    }
-                }
-                System.exit(0);
-            });
-        }
-
-        */
 
 
         private Alert prepareAlert(Alert.AlertType alertType, String title, String contentText, int height, ButtonType... buttons) {
@@ -709,20 +677,6 @@ public class DesktopApplication extends Application {
             return alert;
         }
 
-        //TODO: recover DB in core
-/*        private Alert deleteDbAndHandleException() {
-
-            Alert alert;
-            try {
-                DatabaseManager.tryToDeleteDb();
-                alert = prepareAlert(Alert.AlertType.INFORMATION, "Success", "DB was removed successfully! Please, restart the wallet.", 180);
-            }
-            catch (IOException e) {
-                LOG.error("Unable to delete db!", e);
-                alert = prepareAlert(Alert.AlertType.ERROR, "Db was not recovered", "Cannot recover db. Try to manually delete db folder.", 180);
-            }
-            return alert;
-        }*/
     }
 
 }
