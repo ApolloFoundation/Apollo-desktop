@@ -31,7 +31,7 @@ if  %java_ver% LSS %MIN_JAVA% (
 
 
 @REM are we in dev env or in production
-if exist "%APL_TOP%\apl-exec-*.jar" (
+if exist "%APL_TOP%\apl-desktop-*.jar" (
 	set APL_LIB="%APL_TOP%\lib"
 	set IN_DEV=false
 ) else (
@@ -40,13 +40,13 @@ if exist "%APL_TOP%\apl-exec-*.jar" (
 )
 
 @echo APL_LIB = %APL_LIB%
-if exist "%APL_TOP%\VERSION" (
+if exist "%APL_TOP%\VERSION-desktop" (
 	echo Version file exist
 	set /p APL_VER=<"%APL_TOP%\VERSION"
 	echo %APL_VER%
 ) else (
     @REM calculate version by parsing path
-    for /f tokens^=2-5^ delims^=.-_^" %%j in ('dir /B "%APL_LIB%\apl-tools*"') do set "APL_VER=%%k.%%l.%%m"
+    for /f tokens^=2-5^ delims^=.-_^" %%j in ('dir /B "%APL_TOP%\apl-desktop*"') do set "APL_VER=%%k.%%l.%%m"
 )
 
 set APL_GUI_MAIN=%APL_LIB%\apl-desktop-%APL_VER%.jar

@@ -1,6 +1,6 @@
 # Apollo-desktop
 Apollo desktop applications
 
-<b>!Attention! Repository is under construction!</b>
+At the moment we have Java-FX 11 based desktop application. It uses the same code that Web browser based Apollo wallet
+with some additional functionality that is impossible in browser.
 
-At the moment we have Java-FX 11 based desktop application.

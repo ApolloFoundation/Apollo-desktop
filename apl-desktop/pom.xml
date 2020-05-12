@@ -15,7 +15,7 @@
   </organization>
   
   <properties>
-    <apl-bom.version>1.43.3</apl-bom.version>
+    <apl-bom.version>1.44.0</apl-bom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <java.version>11</java.version>

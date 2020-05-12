@@ -1,7 +1,7 @@
 REM This file required to run application with desktop UI on windows
 @echo off
 set DIRP=%~dp0
-call "%DIRP%\apl-common.bat"
+call "%DIRP%\apl-desktop-common.bat"
 @REM start Apollo
 IF "%1"=="" (
 	%JAVA_CMD% -jar %APL_GUI_MAIN%"

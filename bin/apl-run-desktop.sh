@@ -4,7 +4,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
- . ${DIR}/apl-common.sh 
+ . ${DIR}/apl-desktop-common.sh 
 
 
 unamestr=`uname`
