@@ -7,26 +7,26 @@
   <artifactId>apl-desktop</artifactId>
   <packaging>jar</packaging>
   <groupId>com.apollocurrency</groupId>
-  <version>1.44.0</version>
-   
+  <version>1.44.1</version>
+
   <organization>
     <name>Apollo Foundation</name>
     <url>https://www.apollocurrency.com/</url>
   </organization>
-  
+
   <properties>
-    <apl-bom.version>1.44.0</apl-bom.version>
+    <apl-bom.version>1.44.1</apl-bom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <java.version>11</java.version>
     <javafx.version>14.0.1</javafx.version>
     <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>      
+    <maven.compiler.target>11</maven.compiler.target>
     <compile-plugin.version>3.8.2</compile-plugin.version>
     <zip-file-name>apollo-desktop</zip-file-name>
-    <base-dist-dir>apollo-wallet</base-dist-dir>    
+    <base-dist-dir>apollo-wallet</base-dist-dir>
   </properties>
-  
+
   <profiles>
     <!-- The Configuration of the development profile -->
     <profile>
@@ -56,7 +56,7 @@
       </properties>
     </profile>
   </profiles>
-    
+
   <repositories>
     <!-- arti.firstbridge.work does not chache in apl repo so we have to add Maven Central here -->
     <repository>
@@ -84,7 +84,7 @@
       </snapshots>
     </repository>
   </repositories>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -96,26 +96,26 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-     
+
   <dependencies>
-    
+
     <!-- It is not used at the moment. You'll realy need it when
         implementation of offline transaction siginin will begin
-            
+
         <dependency>
           <groupId>com.apollocurrency</groupId>
           <artifactId>apl-crypto</artifactId>
         </dependency>
-    -->    
-    <!-- this is one thing allowed to import from apollo core 
+    -->
+    <!-- this is one thing allowed to import from apollo core
          but after some cleanup, not today
-    -->  
-<!--    
+    -->
+<!--
     <dependency>
       <groupId>com.apollocurrency</groupId>
       <artifactId>apl-utils</artifactId>
     </dependency>
--->    
+-->
 
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -322,7 +322,7 @@
         <configuration>
           <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
         </configuration>
-      </plugin>     
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -356,8 +356,8 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>     
-      <!-- Build an zip distribution -->        
+      </plugin>
+      <!-- Build an zip distribution -->
       <plugin>
         <groupId>ca.szc.maven</groupId>
         <artifactId>jsonpath-maven-plugin</artifactId>
@@ -381,12 +381,12 @@
             </configuration>
           </execution>
         </executions>
-      </plugin> 
-      
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version> 
+        <version>3.3.0</version>
         <executions>
           <execution>
             <id>distro-assembly</id>
@@ -402,8 +402,8 @@
               <finalName>${zip-file-name}-${project.version}</finalName>
             </configuration>
           </execution>
-        </executions>          
-      </plugin>      
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

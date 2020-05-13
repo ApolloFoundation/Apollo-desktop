@@ -12,7 +12,7 @@ sources.tmp
 Apollo.jar
 Apolloservice.jar
 *.iml
-*.log
+**/*.log
 /lib
 logs
 apl_test_db
@@ -28,5 +28,8 @@ nbactions.xml
 /apl-blockchain-secure-storage/
 /apl-blockchain-vault-keystore/
 /trace.db/
-
 /apl-crypto/testdata/out/
+**/*.iml
+/.mvn/
+/build
+/webui
