@@ -24,7 +24,7 @@
     <maven.compiler.target>11</maven.compiler.target>
     <compile-plugin.version>3.8.2</compile-plugin.version>
     <zip-file-name>apollo-desktop</zip-file-name>
-    <base-dist-dir>apollo-wallet</base-dist-dir>
+    <base-dist-dir>ApolloWallet</base-dist-dir>
   </properties>
 
   <profiles>
