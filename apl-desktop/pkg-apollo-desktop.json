@@ -18,8 +18,8 @@
     {
       "name": "apollo-blockchain",
       "optional": false,
-      "version_min": "1.43.0",
-      "version_max": "1.44.0"
+      "version_min": "1.44.0",
+      "version_max": "1.44.1"
     }
   ]
 }
