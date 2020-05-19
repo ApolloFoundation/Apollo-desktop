@@ -18,6 +18,7 @@ if [[ "$unamestr" == 'Darwin' ]]; then
 fi
 # uncomment when GUI will start standalone
 # ${JAVA_CMD} $xdock  -jar ${MAIN_GUI_JAR}
+${DIR}/apl-start.sh
 
 nohup ${JAVA_CMD} $xdock -jar ${MAIN_GUI_JAR}  $@ > /dev/null 2>&1 &
 echo $! > ${APPLICATION}/apl-desktop.pid
