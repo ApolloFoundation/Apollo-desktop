@@ -4,6 +4,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
+#"
  . ${DIR}/apl-desktop-common.sh 
 
 if [[ ! -d "${APPLICATION}" ]] ; then
@@ -18,7 +19,16 @@ if [[ "$unamestr" == 'Darwin' ]]; then
 fi
 # uncomment when GUI will start standalone
 # ${JAVA_CMD} $xdock  -jar ${MAIN_GUI_JAR}
-${DIR}/apl-start.sh
+
+if [[ $1 == 'tor'  ]]
+then
+    ${DIR}/apl-run-tor.sh &
+elif [[ $1 == 'secure-transport'  ]]
+then
+    ${DIR}/apl-run-secure-transport.sh &
+else
+    ${DIR}/apl-start.sh &
+fi
 
 nohup ${JAVA_CMD} $xdock -jar ${MAIN_GUI_JAR}  $@ > /dev/null 2>&1 &
 echo $! > ${APPLICATION}/apl-desktop.pid
