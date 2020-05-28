@@ -1,0 +1,25 @@
+{
+  "name": "apollo-desktop",
+  "description": "Apollo blockchain desktop wallet",
+  "version": "1.44.1",
+  "dependencies": [
+    {
+      "name": "OpenJDK",
+      "optional": false,
+      "version_min": "11.0.6",
+      "version_max": "13.0.2"
+    },
+    {
+      "name": "apollo-web-ui",
+      "optional": false,
+      "version_min": "2.7.5",
+      "version_max": "2.7.6"
+    },
+    {
+      "name": "apollo-blockchain",
+      "optional": false,
+      "version_min": "1.44.0",
+      "version_max": "1.44.1"
+    }
+  ]
+}
