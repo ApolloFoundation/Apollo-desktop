@@ -6,39 +6,39 @@
 APPLICATION="${HOME}/.apl-blockchain"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-
+#"
 OS=$(uname)
 if [ $OS == "Linux" ] ; then
     readlink_opt="-f"
 fi
-
-APL_TOP_DIR=`dirname $SCRIPT_DIR`
+APL_TOP_DIR=`dirname "$SCRIPT_DIR"`
 ECHO_PREFIX="=== Apollo === "
+
 echo "${ECHO_PREFIX} Apollo wallet installed in directory: ${APL_TOP_DIR}"
 
 #determine version
 
-if [ -f ${APL_TOP_DIR}/VERSION-desktop ] ; then
-    APL_VERSION=$(cat ${APL_TOP_DIR}/VERSION-desktop)
+if [ -f "${APL_TOP_DIR}"/VERSION-desktop ] ; then
+    APL_VERSION=$(cat "${APL_TOP_DIR}"/VERSION-desktop)
 else
-    vers=`ls ${APL_TOP_DIR}/apl-desktop*`
+    vers=`ls "${APL_TOP_DIR}"/apl-desktop*`
     vers=`basename $vers`
     vers=${vers##apl-utils-}
     APL_VERSION=${vers%%.jar}
 fi
 
-MAIN_GUI_JAR=${APL_TOP_DIR}/apl-desktop-${APL_VERSION}.jar
-if [ -r ${MAIN_GUI_JAR} ]; then
+MAIN_GUI_JAR="${APL_TOP_DIR}"/apl-desktop-${APL_VERSION}.jar
+if [ -r "${MAIN_GUI_JAR}" ]; then
     echo -n
 else
-    MAIN_GUI_JAR=${APL_TOP_DIR}/apl-desktop/target/apl-desktop-${APL_VERSION}.jar
+    MAIN_GUI_JAR="${APL_TOP_DIR}"/apl-desktop/target/apl-desktop-${APL_VERSION}.jar
 fi
-echo "${ECHO_PREFIX} Apollo main jar path: ${MAIN_JAR}"
+echo "${ECHO_PREFIX} Apollo desktop app jar path: ${MAIN_GUI_JAR}"
 
 # Java detection code. At the moment it is enough just to check jre in distribution
 # or version of system-wide java installation
-if [ -x ${APL_TOP_DIR}/jre/bin/java ]; then
-    JAVA_CMD=${APL_TOP_DIR}/jre/bin/java
+if [ -x "${APL_TOP_DIR}"/jre/bin/java ]; then
+    JAVA_CMD="${APL_TOP_DIR}"/jre/bin/java
 else
   if [[ -n $(type -p java) ]]
   then
@@ -49,8 +49,14 @@ else
   fi
     JAVA_CMD=java
 fi
+WJAVACMD=$(which "$JAVA_CMD")
+JAVA_BASE=$(dirname "${WJAVACMD}")
+if [ $OS == "Linux" ] ; then
+    JAVA_BASE=$(dirname $(readlink ${readlink_opt} $(which "$JAVA_CMD")))
+fi
 
-JAVA_BASE=$(dirname $(readlink ${readlink_opt} $(which $JAVA_CMD)))
+
+
 JAR_CMD=$JAVA_BASE/jar
 
 jdk_version() {

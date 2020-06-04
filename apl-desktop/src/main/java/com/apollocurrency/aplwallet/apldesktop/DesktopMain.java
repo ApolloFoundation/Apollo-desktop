@@ -41,7 +41,7 @@ public class DesktopMain {
         });
         desktopAppThread.start();
 
-        final int nTriesMax = 20;
+        final int nTriesMax = 200;
 
         LookAndFeel.init();
 
