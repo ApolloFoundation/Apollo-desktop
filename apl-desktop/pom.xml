@@ -7,7 +7,7 @@
   <artifactId>apl-desktop</artifactId>
   <packaging>jar</packaging>
   <groupId>com.apollocurrency</groupId>
-  <version>1.44.2</version>
+  <version>1.45.0</version>
 
   <organization>
     <name>Apollo Foundation</name>
@@ -84,6 +84,7 @@
       </snapshots>
     </repository>
   </repositories>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -95,6 +96,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
 
     <!-- It is not used at the moment. You'll realy need it when
