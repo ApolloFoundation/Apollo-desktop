@@ -5,6 +5,6 @@ package com.apollocurrency.aplwallet.apldesktop;
 
 public final class Constants {
 
-    public static final String VERSION = "1.43.3";
+    public static final String VERSION = "1.44.2";
 
 }
