@@ -22,9 +22,8 @@
     <javafx.version>14.0.1</javafx.version>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <compile-plugin.version>3.8.2</compile-plugin.version>
     <zip-file-name>apollo-desktop</zip-file-name>
-    <base-dist-dir>ApolloWallet</base-dist-dir>
+    <base-dist-dir>ApolloWallet/apollo-desktop</base-dist-dir>
   </properties>
 
   <profiles>
@@ -331,7 +330,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <classpathPrefix>guilib</classpathPrefix>
+              <classpathPrefix>lib</classpathPrefix>
               <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
             </manifest>
           </archive>
@@ -340,7 +339,7 @@
        <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
         <executions>
           <execution>
             <id>copy-dependencies</id>
@@ -352,7 +351,7 @@
               <excludeTypes>zip</excludeTypes>
               <excludeArtifactIds>jsonassert</excludeArtifactIds>
               <excludeGroupIds>org.junit,org.mockito,org.opentest4j,org.hibernate.javax.persistence</excludeGroupIds>
-              <outputDirectory>${project.build.directory}/guilib</outputDirectory>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
             </configuration>
           </execution>
         </executions>
@@ -370,7 +369,7 @@
               <goal>modify</goal>
             </goals>
             <configuration>
-              <file>${basedir}/pkg-apollo-desktop.json</file>
+              <file>${basedir}/packaging/pkg-apollo-desktop.json</file>
               <formatter>conventional</formatter>
               <modifications>
                 <modification>
@@ -399,11 +398,41 @@
                 <descriptor>src/assembly/zipdist.xml</descriptor>
               </descriptors>
               <appendAssemblyId>false</appendAssemblyId>
-              <finalName>${zip-file-name}-${project.version}</finalName>
+              <finalName>${zip-file-name}-NoOS-NoArch-${project.version}</finalName>
             </configuration>
           </execution>
         </executions>
       </plugin>
+      <!-- calculate SHA-256 sums -->
+      <plugin>
+        <groupId>net.nicoulaj.maven.plugins</groupId>
+        <artifactId>checksum-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>${zipExecutionPhase}</phase>
+            <goals>
+              <goal>files</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <fileSets>
+            <fileSet>
+              <directory>${project.build.directory}</directory>
+              <includes>
+                <include>${zip-file-name}-NoOS-NoArch-${project.version}.zip</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+          <algorithms>
+            <algorithm>SHA-256</algorithm>
+          </algorithms>
+          <individualFiles>true</individualFiles>
+          <types>
+            <type>zip</type>
+          </types>
+        </configuration>
+      </plugin>      
     </plugins>
   </build>
 </project>
