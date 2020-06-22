@@ -25,9 +25,9 @@
     </fileSet>
     <fileSet>
       <directory>${project.basedir}</directory>
-      <outputDirectory>./</outputDirectory>
+      <outputDirectory>${base-dist-dir}/../</outputDirectory>
       <includes>
-        <include>pkg-apollo-desktop.json</include>
+        <include>packaging/pkg-apollo-desktop.json</include>
       </includes>
       <fileMode>0644</fileMode>
     </fileSet>        
@@ -36,8 +36,8 @@
       <outputDirectory>${base-dist-dir}/conf</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>${project.build.directory}/guilib</directory>
-      <outputDirectory>${base-dist-dir}/guilib</outputDirectory>
+      <directory>${project.build.directory}/lib</directory>
+      <outputDirectory>${base-dist-dir}/lib</outputDirectory>
       <excludes>
         <exclude>apl-desktop*</exclude>
       </excludes>
