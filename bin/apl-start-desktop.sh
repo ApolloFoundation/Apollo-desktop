@@ -27,7 +27,7 @@ elif [[ $1 == 'secure-transport'  ]]
 then
     "${DIR}"/apl-run-secure-transport.sh &
 else
-    "${DIR}"/apl-start.sh &
+    "${DIR}"/apl-start.sh $1 &
 fi
 nohup "${JAVA_CMD}" $xdock -jar "${MAIN_GUI_JAR}"  $@ > /dev/null 2>&1 &
 echo $! > ${APPLICATION}/apl-desktop.pid
