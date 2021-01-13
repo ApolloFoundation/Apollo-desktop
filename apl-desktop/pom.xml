@@ -7,7 +7,7 @@
   <artifactId>apl-desktop</artifactId>
   <packaging>jar</packaging>
   <groupId>com.apollocurrency</groupId>
-  <version>1.44.7</version>
+  <version>1.47.6</version>
 
   <organization>
     <name>Apollo Foundation</name>
@@ -15,16 +15,15 @@
   </organization>
 
   <properties>
-    <apl-bom-ext.version>1.0.0</apl-bom-ext.version>
+    <apl-bom-ext.version>1.0.4</apl-bom-ext.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <java.version>11</java.version>
-    <javafx.version>14.0.1</javafx.version>
+    <javafx.version>15.0.1</javafx.version>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <compile-plugin.version>3.8.2</compile-plugin.version>
     <zip-file-name>apollo-desktop</zip-file-name>
-    <base-dist-dir>ApolloWallet</base-dist-dir>
+    <base-dist-dir>ApolloWallet/apollo-desktop</base-dist-dir>
   </properties>
 
   <profiles>
@@ -84,6 +83,7 @@
       </snapshots>
     </repository>
   </repositories>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -95,25 +95,8 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
-
-    <!-- It is not used at the moment. You'll realy need it when
-        implementation of offline transaction siginin will begin
-
-        <dependency>
-          <groupId>com.apollocurrency</groupId>
-          <artifactId>apl-crypto</artifactId>
-        </dependency>
-    -->
-    <!-- this is one thing allowed to import from apollo core
-         but after some cleanup, not today
-    -->
-<!--
-    <dependency>
-      <groupId>com.apollocurrency</groupId>
-      <artifactId>apl-utils</artifactId>
-    </dependency>
--->
 
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -329,7 +312,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <classpathPrefix>guilib</classpathPrefix>
+              <classpathPrefix>lib</classpathPrefix>
               <mainClass>com.apollocurrency.aplwallet.apldesktop.DesktopMain</mainClass>
             </manifest>
           </archive>
@@ -338,7 +321,7 @@
        <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
         <executions>
           <execution>
             <id>copy-dependencies</id>
@@ -350,7 +333,7 @@
               <excludeTypes>zip</excludeTypes>
               <excludeArtifactIds>jsonassert</excludeArtifactIds>
               <excludeGroupIds>org.junit,org.mockito,org.opentest4j,org.hibernate.javax.persistence</excludeGroupIds>
-              <outputDirectory>${project.build.directory}/guilib</outputDirectory>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
             </configuration>
           </execution>
         </executions>
@@ -368,7 +351,7 @@
               <goal>modify</goal>
             </goals>
             <configuration>
-              <file>${basedir}/pkg-apollo-desktop.json</file>
+              <file>${basedir}/packaging/pkg-apollo-desktop.json</file>
               <formatter>conventional</formatter>
               <modifications>
                 <modification>
@@ -397,11 +380,40 @@
                 <descriptor>src/assembly/zipdist.xml</descriptor>
               </descriptors>
               <appendAssemblyId>false</appendAssemblyId>
-              <finalName>${zip-file-name}-${project.version}</finalName>
+              <finalName>${zip-file-name}-${project.version}-NoOS-NoArch</finalName>
             </configuration>
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>net.nicoulaj.maven.plugins</groupId>
+        <artifactId>checksum-maven-plugin</artifactId>
+        <version>1.9</version>
+        <executions>
+          <execution>
+            <phase>${zipExecutionPhase}</phase>
+            <goals>
+              <goal>files</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <fileSets>
+            <fileSet>
+              <directory>${project.build.directory}</directory>
+              <includes>
+                <include>${zip-file-name}-${project.version}-NoOS-NoArch.zip</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+          <algorithms>
+            <algorithm>SHA-256</algorithm>
+          </algorithms>
+          <types>
+            <type>zip</type>
+          </types>
+        </configuration>
+      </plugin>      
     </plugins>
   </build>
 </project>
