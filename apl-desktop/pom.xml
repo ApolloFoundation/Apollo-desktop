@@ -7,7 +7,7 @@
   <artifactId>apl-desktop</artifactId>
   <packaging>jar</packaging>
   <groupId>com.apollocurrency</groupId>
-  <version>1.47.10</version>
+  <version>1.47.12</version>
 
   <organization>
     <name>Apollo Foundation</name>
