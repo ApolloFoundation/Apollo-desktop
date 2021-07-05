@@ -5,7 +5,7 @@ if [ -z "${1}" ] ; then
 else
     NEW_VERSION=$1
 fi
-VF="VERSION-desktop"
+VF="./../VERSION-desktop"
 # set versions in parent pom and in all childs
 echo "New version is: $NEW_VERSION"
 echo $NEW_VERSION > $VF
