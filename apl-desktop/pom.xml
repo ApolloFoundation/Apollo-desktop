@@ -413,7 +413,7 @@
             <type>zip</type>
           </types>
         </configuration>
-      </plugin>      
+      </plugin>
     </plugins>
   </build>
 </project>

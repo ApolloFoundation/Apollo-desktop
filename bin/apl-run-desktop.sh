@@ -22,11 +22,11 @@ fi
 
 if [[ $1 == 'tor'  ]]
 then
-    "${DIR}"/apl-run-tor.sh &
+    "${DIR}"/../../apollo-blockchain/bin/apl-run-tor.sh $@ &
 elif [[ $1 == 'secure-transport'  ]]
 then
-    "${DIR}"/apl-run-secure-transport.sh &
+    "${DIR}"/../../apollo-blockchain/bin/apl-run-secure-transport.sh $@ &
 else
-    "${DIR}"/apl-start.sh &
+    "${DIR}"/../../apollo-blockchain/bin/apl-start.sh $@ &
 fi
-"${JAVA_CMD}" $xdock -jar "${MAIN_GUI_JAR}"  $@ 
+"${JAVA_CMD}" $xdock -jar "${MAIN_GUI_JAR}"  $@
