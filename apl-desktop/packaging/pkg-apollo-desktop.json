@@ -13,7 +13,7 @@
       "name": "apollo-web-ui",
       "optional": false,
       "version_min": "2.7.5",
-      "version_max": "2.7.6"
+      "version_max": "2.8.15"
     },
     {
       "name": "apollo-blockchain",
