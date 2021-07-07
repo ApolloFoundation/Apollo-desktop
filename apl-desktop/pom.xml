@@ -222,6 +222,12 @@
       <artifactId>javafx-swing</artifactId>
       <version>${javafx.version}</version>
     </dependency>
+<!--    JavaScript debugger for JavaFX-->
+    <dependency>
+      <groupId>com.vladsch.javafx-webview-debugger</groupId>
+      <artifactId>javafx-webview-debugger</artifactId>
+      <version>0.7.6</version>
+    </dependency>
 
     <!-- unit tests -->
     <dependency>
@@ -413,7 +419,7 @@
             <type>zip</type>
           </types>
         </configuration>
-      </plugin>      
+      </plugin>
     </plugins>
   </build>
 </project>
