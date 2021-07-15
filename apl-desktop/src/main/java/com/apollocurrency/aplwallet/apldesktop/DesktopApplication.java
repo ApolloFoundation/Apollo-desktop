@@ -22,9 +22,12 @@ package com.apollocurrency.aplwallet.apldesktop;
 
 //import com.apollocurrency.aplwallet.apl.util.Constants;
 //import com.apollocurrency.aplwallet.apl.util.Version;
+import com.sun.javafx.scene.web.Debugger;
+import com.vladsch.javafx.webview.debugger.DevToolsDebuggerServer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -51,6 +54,9 @@ import org.slf4j.Logger;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -62,8 +68,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import static com.apollocurrency.aplwallet.apldesktop.DesktopApplication.MainApplication.showStage;
 import javax.net.ssl.HttpsURLConnection;
@@ -75,7 +83,8 @@ public class DesktopApplication extends Application {
     private static final MainApplication MAIN_APPLICATION = MainApplication.getInstance();
     private static final SplashScreen SPLASH_SCREEN = SplashScreen.getInstance();
     private static final DbRecoveringUI DB_RECOVERING_UI = DbRecoveringUI.getInstance();
-    private static final boolean ENABLE_JAVASCRIPT_DEBUGGER = false;
+    public static final int DEBUGGER_PORT = 32322;
+    static boolean ENABLE_JAVASCRIPT_DEBUGGER = false;
     static volatile Stage mainStage;
     private static volatile boolean isSplashScreenLaunched = false;
     private static volatile Stage screenStage;
@@ -390,21 +399,44 @@ public class DesktopApplication extends Application {
 //                        mainStage.setTitle("Apollo" + " Desktop - " + webEngine.getLocation());
 
                 // updateClientState("Desktop Wallet started");
-/*
-                        if (ENABLE_JAVASCRIPT_DEBUGGER) {
-                            try {
-                                // Add the javafx_webview_debugger lib to the classpath
-                                // For more details, check https://github.com/mohamnag/javafx_webview_debugger
-                                Class<?> aClass = Class.forName("com.mohamnag.fxwebview_debugger.DevToolsDebuggerServer");
-                                @SuppressWarnings("deprecation") Debugger debugger = webEngine.impl_getDebugger();
-                                Method startDebugServer = aClass.getMethod("startDebugServer", Debugger.class, int.class);
-                                startDebugServer.invoke(null, debugger, 51742);
+
+                if (ENABLE_JAVASCRIPT_DEBUGGER) {
+
+                    try {
+                        Class webEngineClazz = WebEngine.class;
+
+                        Field debuggerField = webEngineClazz.getDeclaredField("debugger");
+                        debuggerField.setAccessible(true);
+
+                        Debugger debugger = (Debugger) debuggerField.get(webEngine);
+                        DevToolsDebuggerServer bridge = new DevToolsDebuggerServer(debugger, DEBUGGER_PORT, 0, null, null);
+                        CompletableFuture.runAsync(()-> {
+                            long maxWaitingTime = 20_000;
+                            long currentWaitingTime = 0;
+                            while (true) {
+                                if (currentWaitingTime > maxWaitingTime) {
+                                    LOG.error("Unable to connect debugger to port {}, maybe that port is already in use", DEBUGGER_PORT);
+                                    break;
+                                }
+                                long beginIterationTime = System.currentTimeMillis();
+                                if (!bridge.getDebugUrl().isBlank()) {
+                                    LOG.info("Chrome Debugger URL is {}", bridge.getDebugUrl().replace("chrome-", ""));
+                                    break;
+                                }
+                                try {
+                                    Thread.sleep(50);
+                                    currentWaitingTime += (System.currentTimeMillis() - beginIterationTime);
+                                } catch (InterruptedException e) {
+                                    LOG.error("Debugger connection waiting was interrupted", e);
+                                }
                             }
-                            catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                                LOG.info("Cannot start JavaFx debugger", e);
-                            }
-                        }
-*/
+                        });
+
+                        mainStage.setOnCloseRequest(windowEvent -> bridge.stopDebugServer(stopStatus -> LOG.info("DevToolsDebugServer {} at port {}", stopStatus ? "stopped" : "not stopped", DEBUGGER_PORT)));
+                    } catch (IllegalAccessException | NoSuchFieldException e) {
+                        LOG.info("Cannot start JavaFx debugger", e);
+                    }
+                }
             });
 
             // Invoked by the webEngine popup handler
@@ -489,7 +521,7 @@ public class DesktopApplication extends Application {
 
             ButtonType clickedButton = warnAlert.showAndWait().orElse(ButtonType.NO);
             if (clickedButton == ButtonType.YES) {
-                System.exit(0);
+                Platform.exit();
             }
         }
 

@@ -60,10 +60,23 @@ public class DesktopMain {
             }
         }
         if (workingAPI) {
+            DesktopApplication.ENABLE_JAVASCRIPT_DEBUGGER = startDebug(args);
             DesktopApplication.startDesktopApplication(apiUrl);
         } else {
             Platform.runLater(DesktopMain::showAPIError);
         }
+    }
+
+    private static boolean startDebug(String[] args) {
+        boolean startDebug = false;
+        if (args.length == 1) {
+            if ("-d".equals(args[0])) {
+                startDebug = true;
+            }
+        } else if (args.length > 1) {
+            throw new IllegalArgumentException("Only one '-d' cmd arg is supported");
+        }
+        return startDebug;
     }
 
     private static void showAPIError() {
