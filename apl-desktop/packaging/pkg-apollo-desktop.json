@@ -1,7 +1,7 @@
 {
   "name": "apollo-desktop",
   "description": "Apollo blockchain desktop wallet",
-  "version": "1.48.6",
+  "version": "1.48.7",
   "dependencies": [
     {
       "name": "OpenJDK",
