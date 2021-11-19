@@ -382,6 +382,7 @@ public class DesktopApplication extends Application {
                     LOG.debug("Console: [" + sourceId + ":" + lineNumber + "] " + message);
                 }
             });
+
             Worker<Void> loadWorker = webEngine.getLoadWorker();
             loadWorker.stateProperty().addListener((ov, oldState, newState) -> {
                 LOG.debug("loadWorker old state " + oldState + " new state " + newState);
