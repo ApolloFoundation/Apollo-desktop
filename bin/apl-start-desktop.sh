@@ -29,6 +29,6 @@ then
 else
     "${DIR}"/../../apollo-blockchain/bin/apl-start.sh $@ &
 fi
-nohup "${JAVA_CMD}" $xdock -jar "${MAIN_GUI_JAR}"  $@ > /dev/null 2>&1 &
+nohup "${JAVA_CMD}" $xdock -jar "${MAIN_GUI_JAR}" > /dev/null 2>&1 &
 echo $! > ${APPLICATION}/apl-desktop.pid
 #cd - > /dev/null
