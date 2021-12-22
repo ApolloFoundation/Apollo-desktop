@@ -77,6 +77,10 @@ import static com.apollocurrency.aplwallet.apldesktop.DesktopApplication.MainApp
 import javax.net.ssl.HttpsURLConnection;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import javafx.beans.value.ChangeListener;
+import org.w3c.dom.Document;
+import com.sun.javafx.webkit.WebConsoleListener;
+
 public class DesktopApplication extends Application {
     private static final Logger LOG = getLogger(DesktopApplication.class);
 
@@ -352,7 +356,7 @@ public class DesktopApplication extends Application {
 
         private static void enableFirebug(final WebEngine engine) {
             //uncomment it to enable firebug
-            //engine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
+//            engine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://cdnjs.cloudflare.com/ajax/libs/firebug-lite/1.4.0/firebug-lite.min.js' + '#startOpened');}");
         }
 
         public void startDesktopApplication() {
@@ -372,12 +376,13 @@ public class DesktopApplication extends Application {
 //            TODO figure out why do we require user config dir here for localstorage
 //            webEngine.setUserDataDirectory(new File(RuntimeEnvironment.getInstance().getDirProvider().getUserConfigDirectory()));
 
-//            WebConsoleListener.setDefaultListener(new WebConsoleListener(){
-//                @Override
-//                public void messageAdded(WebView webView, String message, int lineNumber, String sourceId) {
-//                    LOG.debug("Console: [" + sourceId + ":" + lineNumber + "] " + message);
-//                }
-//            });
+            WebConsoleListener.setDefaultListener(new WebConsoleListener(){
+                @Override
+                public void messageAdded(WebView webView, String message, int lineNumber, String sourceId) {
+                    LOG.debug("Console: [" + sourceId + ":" + lineNumber + "] " + message);
+                }
+            });
+
             Worker<Void> loadWorker = webEngine.getLoadWorker();
             loadWorker.stateProperty().addListener((ov, oldState, newState) -> {
                 LOG.debug("loadWorker old state " + oldState + " new state " + newState);

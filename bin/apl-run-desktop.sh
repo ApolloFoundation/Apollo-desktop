@@ -30,3 +30,4 @@ else
     "${DIR}"/../../apollo-blockchain/bin/apl-start.sh $@ &
 fi
 "${JAVA_CMD}" $xdock -jar "${MAIN_GUI_JAR}"  $@
+
