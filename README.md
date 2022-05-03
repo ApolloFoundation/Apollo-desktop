@@ -21,7 +21,7 @@ Clone repository, then run following commands
 	cd apl-desktop
 	./mvnw clean install
 </pre>	
-Maven wrapper downloads Apache Maven and then builds package. Final package is zip file in "___target___" directory, e.g. ___apollo-desktop-"1.50.36"-NoOS-NoArch.zip___ that contains all required components and libraries.
+Maven wrapper downloads Apache Maven and then builds package. Final package is zip file in "___target___" directory, e.g. ___apollo-desktop-"1.50.37"-NoOS-NoArch.zip___ that contains all required components and libraries.
 
 ## How to run
 
