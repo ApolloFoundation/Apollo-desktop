@@ -34,6 +34,7 @@ public class DesktopMain {
     public static void main(String[] args) {
         String apiUrl = DesktopConfig.getInstance().getWelocmePageURI();
         LOG = getLogger(DesktopMain.class);
+        LOG.debug("WelcomePageURI apiUrl = {}", apiUrl);
 
         desktopApp = new DesktopApplication();
         Thread desktopAppThread = new Thread(() -> {
@@ -102,9 +103,12 @@ public class DesktopMain {
 
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            LOG.debug("WebUI response {}", response.statusCode());
             res = response.statusCode() == 200;
             if (res) {
                 DesktopApplication.updateSplashScreenStatus(response.body());
+            } else {
+                LOG.debug("WebUI error response = '{}'", response.body());
             }
         } catch (IOException ex) {
             LOG.debug("WebUI is not available at {}", url);

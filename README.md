@@ -12,7 +12,7 @@ Please refer to following sub-projects:
 
 ### Requirements
 
-	Any JDK 11 distribution, the mainstream openjdk 11.0.9 or later is prefferred.
+	Any JDK 17 distribution, the graalvm jdk 17.0.5 or later is prefferred.
 	
 ### Build commands
 
@@ -27,13 +27,13 @@ Maven wrapper downloads Apache Maven and then builds package. Final package is z
 
 ### Requirements
 
-Any JRE 11 distribution, the mainstream openjdk 11.0.9 or later is prefferred.
+Any JRE 17 distribution, the graalvm jdk 17.0.5 or later is prefferred.
 
 ### Run desktop wallet
 
 At the moment Apollo-desktop requires ___Apollo-blockchain package___ running on the local computer and ___Apollo-web-ui___ package is installed. We plan to change this in the nearest future and allow Apollo-desktop to work with trusted remote Apollo nodes.
 
-When Apollo blockchain node is up and running, you can start Apollo-desktop wallet by scripts in ApolloWallet/apollo-dekstop/bin directory.
+When Apollo blockchain node is up and running, you can start Apollo-desktop wallet by scripts in ApolloWallet/apollo-desktop/bin directory.
 
 ### Debugging JavaScript
 
