@@ -32,7 +32,7 @@ public class DesktopMain {
     private static boolean workingAPI = false;
 
     public static void main(String[] args) {
-        String apiUrl = DesktopConfig.getInstance().getWelocmePageURI();
+        String apiUrl = DesktopConfig.getInstance().getWelcomePageURI();
         LOG = getLogger(DesktopMain.class);
         LOG.debug("WelcomePageURI apiUrl = {}", apiUrl);
 
@@ -81,7 +81,7 @@ public class DesktopMain {
     }
 
     private static void showAPIError() {
-        String url = DesktopConfig.getInstance().getWelocmePageURI();
+        String url = DesktopConfig.getInstance().getWelcomePageURI();
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Apollo API is not available");
@@ -92,7 +92,7 @@ public class DesktopMain {
     }
 
     private static boolean checkAPI() {
-        String url = DesktopConfig.getInstance().getWelocmePageURI();
+        String url = DesktopConfig.getInstance().getWelcomePageURI();
         HttpClient client = HttpClient.newBuilder()
                 .followRedirects(Redirect.NORMAL)
                 .connectTimeout(Duration.ofSeconds(3))
@@ -126,7 +126,7 @@ public class DesktopMain {
 
     public void launchDesktopApplication() {
         LOG.info("Launching desktop wallet");
-        desktopApp.startDesktopApplication(DesktopConfig.getInstance().getWelocmePageURI());
+        desktopApp.startDesktopApplication(DesktopConfig.getInstance().getWelcomePageURI());
     }
 
     public void shutdown() {
