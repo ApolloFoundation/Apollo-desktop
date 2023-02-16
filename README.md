@@ -27,7 +27,7 @@ Maven wrapper downloads Apache Maven and then builds package. Final package is z
 
 ### Requirements
 
-Any JRE 17 distribution, the graalvm jdk 17.0.5 or later is prefferred.
+Any JRE 17 distribution, the graalvm jdk 17.0.5 or later is preferred.
 
 ### Run desktop wallet
 
@@ -48,6 +48,7 @@ with adding `-d` parameter to launch Apollo Desktop App
  `Chrome Debugger URL is devtools://devtools/bundled/inspector.html?ws=localhost:32322/`
 * Open the Chrome Browser and go to  URL given in the message above
 * Perform any action on Apollo Desktop App and see all the stats at Chrome devtools
+
 ## GIT branches
 
 We follow GIT FLOW procedure in our developemnt and use following branhces:
