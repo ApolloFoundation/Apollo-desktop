@@ -19,25 +19,25 @@ public class DesktopConfig {
 
     //All supported properties should be listed here and organized as getters
     public static final String WELCOME_PAGE_URI = "apl.APITURL";
-    
+
     @Getter
-    private String welocmePageURI = "http://localhost:7876";
+    private String welcomePageURI = "http://localhost:7876";
 
     private Properties conf = new Properties();
 
     private static DesktopConfig instance = null;
 
     private DesktopConfig() {
- 
+
     }
-    
+
     public static DesktopConfig getInstance(){
        if (instance == null) {
             instance = new DesktopConfig();
        }
        return instance;
     }
-    
+
     public boolean readConfig(InputStream is) {
         boolean res = true;
         try {
@@ -55,7 +55,7 @@ public class DesktopConfig {
         //
         String ws = conf.getProperty(WELCOME_PAGE_URI);
         if (ws != null) {
-            welocmePageURI = ws;
+            welcomePageURI = ws;
         }
 
     }

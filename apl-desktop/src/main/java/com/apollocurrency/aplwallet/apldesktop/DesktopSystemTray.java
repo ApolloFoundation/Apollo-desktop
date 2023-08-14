@@ -34,7 +34,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.DateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
@@ -58,8 +57,8 @@ public class DesktopSystemTray {
     private MenuItem openWalletInBrowser;
     private MenuItem viewLog;
     private SystemTrayDataProvider dataProvider;
-   
-        
+
+
     public static String humanReadableByteCount(long bytes) {
         int unit = 1000;
         if (bytes < unit) {
@@ -195,7 +194,7 @@ public class DesktopSystemTray {
         statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.Y_AXIS));
 
         addLabelRow(statusPanel, "Installation");
-//TODO: read from backend        
+//TODO: read from backend
         addDataRow(statusPanel, "Application", "Apollo Wallet");
         addDataRow(statusPanel, "Version", "0.0.0");
         //addDataRow(statusPanel, "Network", blockchainConfig.getChain().getName());
@@ -205,7 +204,7 @@ public class DesktopSystemTray {
         addDataRow(statusPanel, "Working offline", "" + "false");
         //TODO: get URL from config
 
-        addDataRow(statusPanel, "Wallet", DesktopConfig.getInstance().getWelocmePageURI());
+        addDataRow(statusPanel, "Wallet", DesktopConfig.getInstance().getWelcomePageURI());
 //        addDataRow(statusPanel, "Peer port", String.valueOf(Peers.getDefaultPeerPort()));
         addDataRow(statusPanel, "Program folder", String.valueOf(Paths.get(".").toAbsolutePath().getParent()));
 //        addDataRow(statusPanel, "User folder", String.valueOf(Paths.get(AplCoreRuntime.getInstance().getUserHomeDir()).toAbsolutePath()));

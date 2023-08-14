@@ -65,12 +65,12 @@ public class JavaScriptBridge {
 
     @SuppressWarnings("unused")
     public void openBrowser(String account) {
-        final String url = DesktopConfig.getInstance().getWelocmePageURI()+ "?account=" + account;
+        final String url = DesktopConfig.getInstance().getWelcomePageURI()+ "?account=" + account;
         Platform.runLater(() -> {
             try {
                 Desktop.getDesktop().browse(new URI(url));
             } catch (Exception e) {
-                LOG.info("Cannot open " + DesktopConfig.getInstance().getWelocmePageURI() + " error " + e.getMessage());
+                LOG.info("Cannot open " + DesktopConfig.getInstance().getWelcomePageURI() + " error " + e.getMessage());
             }
         });
     }

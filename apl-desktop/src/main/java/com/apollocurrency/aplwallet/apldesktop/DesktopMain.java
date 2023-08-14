@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpRequest;
@@ -23,7 +24,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class DesktopMain {
 
-    public static String logDir = System.getProperty("user.home" + "/.apl-blockchain/apl-desktop");
+    // Linux path version
+    public static String logDir = System.getProperty("user.home") + "/.apl-blockchain/apl-blockchain-logs/apl-desktop.log";
     private static Logger LOG;
 
     private static DesktopSystemTray desktopSystemTray;
@@ -32,8 +34,9 @@ public class DesktopMain {
     private static boolean workingAPI = false;
 
     public static void main(String[] args) {
-        String apiUrl = DesktopConfig.getInstance().getWelocmePageURI();
+        String apiUrl = DesktopConfig.getInstance().getWelcomePageURI();
         LOG = getLogger(DesktopMain.class);
+        LOG.debug("WelcomePageURI apiUrl = {}", apiUrl);
 
         desktopApp = new DesktopApplication();
         Thread desktopAppThread = new Thread(() -> {
@@ -47,6 +50,17 @@ public class DesktopMain {
 
         desktopSystemTray = new DesktopSystemTray();
         SwingUtilities.invokeLater(desktopSystemTray::createAndShowGUI);
+        if (OS.equalsIgnoreCase("linux")) {
+            // bind data for running commands: Open Wallet in browser, View log file
+            try {
+                LOG.debug("logDir = {}", logDir);
+                desktopSystemTray.setToolTip(
+                    new SystemTrayDataProvider("Server message", new URI(apiUrl), new File(logDir)));
+            } catch (URISyntaxException e) {
+                LOG.error("Error on setting tool tip", e);
+                throw new RuntimeException(e);
+            }
+        }
 
         for (int i = 0; i < nTriesMax; i++) {
             workingAPI = checkAPI();
@@ -57,6 +71,7 @@ public class DesktopMain {
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (InterruptedException e) {
                 LOG.info("GUI thread was interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
         if (workingAPI) {
@@ -80,7 +95,7 @@ public class DesktopMain {
     }
 
     private static void showAPIError() {
-        String url = DesktopConfig.getInstance().getWelocmePageURI();
+        String url = DesktopConfig.getInstance().getWelcomePageURI();
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Apollo API is not available");
@@ -91,7 +106,7 @@ public class DesktopMain {
     }
 
     private static boolean checkAPI() {
-        String url = DesktopConfig.getInstance().getWelocmePageURI();
+        String url = DesktopConfig.getInstance().getWelcomePageURI();
         HttpClient client = HttpClient.newBuilder()
                 .followRedirects(Redirect.NORMAL)
                 .connectTimeout(Duration.ofSeconds(3))
@@ -102,9 +117,12 @@ public class DesktopMain {
 
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            LOG.debug("WebUI response {}", response.statusCode());
             res = response.statusCode() == 200;
             if (res) {
                 DesktopApplication.updateSplashScreenStatus(response.body());
+            } else {
+                LOG.debug("WebUI error response = '{}'", response.body());
             }
         } catch (IOException ex) {
             LOG.debug("WebUI is not available at {}", url);
@@ -122,7 +140,7 @@ public class DesktopMain {
 
     public void launchDesktopApplication() {
         LOG.info("Launching desktop wallet");
-        desktopApp.startDesktopApplication(DesktopConfig.getInstance().getWelocmePageURI());
+        desktopApp.startDesktopApplication(DesktopConfig.getInstance().getWelcomePageURI());
     }
 
     public void shutdown() {

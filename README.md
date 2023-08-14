@@ -12,7 +12,7 @@ Please refer to following sub-projects:
 
 ### Requirements
 
-	Any JDK 11 distribution, the mainstream openjdk 11.0.9 or later is prefferred.
+	Any JDK 17 distribution, the graalvm jdk 17.0.5 or later is prefferred.
 	
 ### Build commands
 
@@ -21,19 +21,19 @@ Clone repository, then run following commands
 	cd apl-desktop
 	./mvnw clean install
 </pre>	
-Maven wrapper downloads Apache Maven and then builds package. Final package is zip file in "___target___" directory, e.g. ___apollo-desktop-"1.50.33"-NoOS-NoArch.zip___ that contains all required components and libraries.
+Maven wrapper downloads Apache Maven and then builds package. Final package is zip file in "___target___" directory, e.g. ___apollo-desktop-"2.0.1"-NoOS-NoArch.zip___ that contains all required components and libraries.
 
 ## How to run
 
 ### Requirements
 
-Any JRE 11 distribution, the mainstream openjdk 11.0.9 or later is prefferred.
+Any JRE 17 distribution, the graalvm jdk 17.0.5 or later is preferred.
 
 ### Run desktop wallet
 
 At the moment Apollo-desktop requires ___Apollo-blockchain package___ running on the local computer and ___Apollo-web-ui___ package is installed. We plan to change this in the nearest future and allow Apollo-desktop to work with trusted remote Apollo nodes.
 
-When Apollo blockchain node is up and running, you can start Apollo-desktop wallet by scripts in ApolloWallet/apollo-dekstop/bin directory.
+When Apollo blockchain node is up and running, you can start Apollo-desktop wallet by scripts in ApolloWallet/apollo-desktop/bin directory.
 
 ### Debugging JavaScript
 
@@ -48,6 +48,7 @@ with adding `-d` parameter to launch Apollo Desktop App
  `Chrome Debugger URL is devtools://devtools/bundled/inspector.html?ws=localhost:32322/`
 * Open the Chrome Browser and go to  URL given in the message above
 * Perform any action on Apollo Desktop App and see all the stats at Chrome devtools
+
 ## GIT branches
 
 We follow GIT FLOW procedure in our developemnt and use following branhces:
